@@ -7,13 +7,13 @@ const PlayerPage = () => {
   const params = new URLSearchParams(location.search);
   const audioUrl = params.get('url');
 
+  if (!audioUrl) {
+    return <p>No audio URL provided</p>;
+  }
+
   return (
     <div className="container">
-      {audioUrl ? (
-        <AudioPlayer audioUrl={audioUrl} />
-      ) : (
-        <p>No audio file selected</p>
-      )}
+      <AudioPlayer audioUrl={audioUrl} />
     </div>
   );
 };
