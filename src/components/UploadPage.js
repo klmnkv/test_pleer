@@ -36,7 +36,7 @@ const UploadPage = () => {
   formData.append('audio', file);
 
   try {
-    const response = await axios.post('http://localhost:3000/upload', formData, {
+    const response = await axios.post('https://server-pleer.onrender.com/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
