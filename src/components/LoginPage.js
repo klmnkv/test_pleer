@@ -10,7 +10,8 @@ const LoginPage = ({ setAuth }) => {
   const handleLogin = () => {
     if (username === 'admin' && password === 'password') {
       setAuth(true);
-      navigate('/admin');
+      console.log('Auth set to true');
+      navigate('/upload');
     } else {
       setError('Invalid username or password');
     }

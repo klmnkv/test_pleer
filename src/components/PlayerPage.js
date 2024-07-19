@@ -5,7 +5,7 @@ import AudioPlayer from './AudioPlayer';
 const PlayerPage = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const audioUrl = decodeURIComponent(params.get('url'));
+  const audioUrl = params.get('url');
 
   return (
     <div className="container">
