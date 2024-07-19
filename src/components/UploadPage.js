@@ -15,6 +15,7 @@ const UploadPage = () => {
         setFiles(response.data);
       } catch (error) {
         console.error('Error fetching files:', error);
+        setError(`Error fetching files: ${error.response?.data?.error || error.message}`);
       }
     };
 
