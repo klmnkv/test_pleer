@@ -12,10 +12,11 @@ const UploadPage = () => {
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const response = await axios.get('https://your-app-name.onrender.com/files');
+        const response = await axios.get('https://server-pleer.onrender.com/files');
         setFiles(response.data);
       } catch (error) {
         console.error('Error fetching files:', error);
+        setError('Failed to fetch files. Please try again later.');
       }
     };
 
@@ -36,7 +37,7 @@ const UploadPage = () => {
     formData.append('audio', file);
 
     try {
-      const response = await axios.post('https://your-app-name.onrender.com/upload', formData, {
+      const response = await axios.post('https://server-pleer.onrender.com/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -53,7 +54,12 @@ const UploadPage = () => {
   return (
     <div className="container">
       <h2>Upload Audio</h2>
-      <input type="file" onChange={handleFileChange} aria-label="Select an audio file to upload" />
+      <input
+        type="file"
+        onChange={handleFileChange}
+        accept="audio/*"
+        aria-label="Select an audio file to upload"
+      />
       <button onClick={handleUpload} aria-label="Upload the selected audio file">Upload</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {audioUrl && (
@@ -66,7 +72,10 @@ const UploadPage = () => {
       <ul>
         {files.map((file, index) => (
           <li key={index}>
-            <Link to={`/play?url=${encodeURIComponent(file)}`} aria-label={`Play the audio file ${file}`}>{file}</Link>
+            <Link to={`/play?url=${encodeURIComponent(file)}`} aria-label={`Play the audio file ${file}`}>
+              {file.split('/').pop()} {/* Display only the filename */}
+            </Link>
+            <audio controls src={file} /> {/* Direct playback option */}
           </li>
         ))}
       </ul>
