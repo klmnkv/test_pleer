@@ -1,37 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 const PlayerPage = () => {
-  const [audioUrl, setAudioUrl] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const { id } = useParams();
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const audioUrl = urlParams.get('url');
 
-  useEffect(() => {
-    const fetchAudioUrl = async () => {
-      try {
-        const response = await axios.get(`https://server-pleer.onrender.com/audio/${id}`);
-        setAudioUrl(response.data.url);
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching audio:', err);
-        setError('Не удалось загрузить аудио. Пожалуйста, попробуйте еще раз.');
-        setLoading(false);
-      }
-    };
-
-    fetchAudioUrl();
-  }, [id]);
-
-  if (loading) return <div>Загрузка...</div>;
-  if (error) return <div>{error}</div>;
+  if (!audioUrl) {
+    return <div>No audio URL provided</div>;
+  }
 
   return (
     <div>
-      <h1>Тифлокомментарий</h1>
+      <h1>Audio Player</h1>
       <audio controls src={audioUrl}>
-        Ваш браузер не поддерживает аудио элемент.
+        Your browser does not support the audio element.
       </audio>
     </div>
   );
