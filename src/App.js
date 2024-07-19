@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './components/LoginPage';
 import UploadPage from './components/UploadPage';
@@ -11,20 +11,43 @@ const App = () => {
 
   return (
     <Router>
-      <Routes>
-        <Route path="/login" element={<LoginPage setAuth={setIsAuthenticated} />} />
-        <Route path="/play" element={<PlayerPage />} />
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute auth={isAuthenticated}>
-              <UploadPage />
-            </ProtectedRoute>
-          }
-        />
-        {/* Default route to login page */}
-        <Route path="*" element={<LoginPage setAuth={setIsAuthenticated} />} />
-      </Routes>
+      <div className="App">
+        <Routes>
+          {/* Маршрут для страницы входа */}
+          <Route
+            path="/login"
+            element={<LoginPage setAuth={setIsAuthenticated} />}
+          />
+
+          {/* Маршрут для страницы воспроизведения */}
+          <Route
+            path="/play"
+            element={<PlayerPage />}
+          />
+
+          {/* Защищенный маршрут для страницы загрузки */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute auth={isAuthenticated}>
+                <UploadPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Перенаправление на страницу входа по умолчанию */}
+          <Route
+            path="/"
+            element={<Navigate to="/login" replace />}
+          />
+
+          {/* Обработка всех остальных маршрутов */}
+          <Route
+            path="*"
+            element={<Navigate to="/login" replace />}
+          />
+        </Routes>
+      </div>
     </Router>
   );
 };
