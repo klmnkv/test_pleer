@@ -6,10 +6,6 @@ const PlayerPage = () => {
   const urlParams = new URLSearchParams(location.search);
   const audioUrl = urlParams.get('url');
 
-  if (!audioUrl) {
-    return <div>No audio URL provided</div>;
-  }
-
   return (
     <div>
       <h1>Audio Player</h1>

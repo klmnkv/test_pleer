@@ -31,7 +31,6 @@ const UploadPage = () => {
       setError('Please select a file first');
       return;
     }
-
     const formData = new FormData();
     formData.append('audio', file);
 
@@ -53,12 +52,7 @@ const UploadPage = () => {
   return (
     <div className="container">
       <h2>Upload Audio</h2>
-      <input
-        type="file"
-        onChange={handleFileChange}
-        accept="audio/*"
-        aria-label="Select an audio file to upload"
-      />
+      <input type="file" onChange={handleFileChange} aria-label="Select an audio file to upload" />
       <button onClick={handleUpload} aria-label="Upload the selected audio file">Upload</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {audioUrl && (
@@ -71,9 +65,7 @@ const UploadPage = () => {
       <ul>
         {files.map((file, index) => (
           <li key={index}>
-            <Link to={`/play?url=${encodeURIComponent(file)}`} aria-label={`Play the audio file ${file}`}>
-              {file}
-            </Link>
+            <Link to={`/play?url=${encodeURIComponent(file)}`} aria-label={`Play the audio file ${file}`}>{file}</Link>
           </li>
         ))}
       </ul>
