@@ -16,7 +16,6 @@ const UploadPage = () => {
         setFiles(response.data);
       } catch (error) {
         console.error('Error fetching files:', error);
-        setError('Failed to fetch files. Please try again later.');
       }
     };
 
@@ -51,15 +50,20 @@ const UploadPage = () => {
     }
   };
 
+  const handleDelete = async (filename) => {
+    try {
+      await axios.delete(`https://server-pleer.onrender.com/delete/${filename}`);
+      setFiles(files.filter(file => !file.includes(filename)));
+    } catch (error) {
+      console.error('Delete error:', error);
+      setError(`Delete failed: ${error.response?.data?.error || error.message || 'Unknown error'}`);
+    }
+  };
+
   return (
     <div className="container">
       <h2>Upload Audio</h2>
-      <input
-        type="file"
-        onChange={handleFileChange}
-        accept="audio/*"
-        aria-label="Select an audio file to upload"
-      />
+      <input type="file" onChange={handleFileChange} aria-label="Select an audio file to upload" />
       <button onClick={handleUpload} aria-label="Upload the selected audio file">Upload</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {audioUrl && (
@@ -70,14 +74,15 @@ const UploadPage = () => {
       )}
       <h2>Uploaded Files</h2>
       <ul>
-        {files.map((file, index) => (
-          <li key={index}>
-            <Link to={`/play?url=${encodeURIComponent(file)}`} aria-label={`Play the audio file ${file}`}>
-              {file.split('/').pop()} {/* Display only the filename */}
-            </Link>
-            <audio controls src={file} /> {/* Direct playback option */}
-          </li>
-        ))}
+        {files.map((file, index) => {
+          const filename = file.split('/').pop();
+          return (
+            <li key={index}>
+              <Link to={`/play?url=${encodeURIComponent(file)}`} aria-label={`Play the audio file ${file}`}>{file}</Link>
+              <button onClick={() => handleDelete(filename)} aria-label={`Delete the audio file ${file}`}>Delete</button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
