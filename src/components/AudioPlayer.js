@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const AudioPlayer = ({ audioUrl }) => {
   const audioRef = useRef(null);
@@ -35,10 +35,10 @@ const AudioPlayer = ({ audioUrl }) => {
   };
 
   return (
-    <div className="player-container">
+    <div>
       <h2>Audio Player</h2>
-      <audio ref={audioRef} src={audioUrl} aria-label="Audio player for the selected file" />
-      <div className="controls">
+      <audio ref={audioRef} src={audioUrl} />
+      <div>
         <button onClick={handlePlayPauseClick} aria-label={isPlaying ? "Pause" : "Play"}>
           {isPlaying ? "Pause" : "Play"}
         </button>
@@ -50,7 +50,7 @@ const AudioPlayer = ({ audioUrl }) => {
             max="1"
             step="0.01"
             onChange={handleVolumeChange}
-            aria-label="Volume control"
+            aria-label="Volume"
           />
         </label>
       </div>
