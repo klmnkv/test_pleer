@@ -12,7 +12,7 @@ const UploadPage = () => {
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/files');
+        const response = await axios.get('https://server-pleer.onrender.com:3000/files');
         setFiles(response.data);
       } catch (error) {
         console.error('Error fetching files:', error);
