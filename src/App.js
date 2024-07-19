@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import LoginPage from './LoginPage';
-import UploadPage from './UploadPage';
-import PlayerPage from './PlayerPage';
-import ProtectedRoute from './ProtectedRoute';
+import LoginPage from './components/LoginPage';
+import UploadPage from './components/UploadPage';
+import PlayerPage from './components/PlayerPage';
+import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
 function App() {
