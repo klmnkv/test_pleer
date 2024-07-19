@@ -1,27 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import '../App.css';
 
 const UploadPage = () => {
   const [file, setFile] = useState(null);
-  const [audioUrl, setAudioUrl] = useState('');
+  const [shareUrl, setShareUrl] = useState('');
   const [error, setError] = useState('');
-  const [files, setFiles] = useState([]);
-
-  useEffect(() => {
-    const fetchFiles = async () => {
-      try {
-        const response = await axios.get('https://server-pleer.onrender.com/files');
-        setFiles(response.data);
-      } catch (error) {
-        console.error('Error fetching files:', error);
-        setError('Failed to fetch files. Please try again later.');
-      }
-    };
-
-    fetchFiles();
-  }, []);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -38,47 +21,32 @@ const UploadPage = () => {
 
     try {
       const response = await axios.post('https://server-pleer.onrender.com/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
-      setAudioUrl(response.data.audioUrl);
+      const audioId = response.data.audioId; // Предполагаем, что сервер возвращает ID аудио
+      setShareUrl(`${window.location.origin}/play/${audioId}`);
       setError('');
-      setFiles([...files, response.data.audioUrl]);
     } catch (error) {
       console.error('Upload error:', error);
-      setError(`Upload failed: ${error.response?.data?.error || error.message || 'Unknown error'}`);
+      setError('Upload failed. Please try again.');
     }
   };
 
   return (
-    <div className="container">
-      <h2>Upload Audio</h2>
-      <input
-        type="file"
-        onChange={handleFileChange}
-        accept="audio/*"
-        aria-label="Select an audio file to upload"
-      />
-      <button onClick={handleUpload} aria-label="Upload the selected audio file">Upload</button>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {audioUrl && (
+    <div className="upload-container">
+      <h2>Загрузка тифлокомментария</h2>
+      <input type="file" onChange={handleFileChange} accept="audio/*" />
+      <button onClick={handleUpload}>Загрузить</button>
+      {error && <p className="error">{error}</p>}
+      {shareUrl && (
         <div>
-          <p>Audio URL: <Link to={`/play?url=${encodeURIComponent(audioUrl)}`}>{audioUrl}</Link></p>
-          <audio controls src={audioUrl} aria-label="Audio player for the uploaded file" />
+          <p>Ссылка для шаринга:</p>
+          <input type="text" value={shareUrl} readOnly />
+          <button onClick={() => navigator.clipboard.writeText(shareUrl)}>
+            Копировать ссылку
+          </button>
         </div>
       )}
-      <h2>Uploaded Files</h2>
-      <ul>
-        {files.map((file, index) => (
-          <li key={index}>
-            <Link to={`/play?url=${encodeURIComponent(file)}`} aria-label={`Play the audio file ${file}`}>
-              {file.split('/').pop()} {/* Display only the filename */}
-            </Link>
-            <audio controls src={file} /> {/* Direct playback option */}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 };
