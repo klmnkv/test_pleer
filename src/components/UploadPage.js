@@ -12,7 +12,7 @@ const UploadPage = () => {
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const response = await axios.get('https://server-pleer.onrender.com/files');
+        const response = await axios.get('https://your-app-name.onrender.com/files');
         setFiles(response.data);
       } catch (error) {
         console.error('Error fetching files:', error);
@@ -36,7 +36,7 @@ const UploadPage = () => {
     formData.append('audio', file);
 
     try {
-      const response = await axios.post('https://server-pleer.onrender.com/upload', formData, {
+      const response = await axios.post('https://your-app-name.onrender.com/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -3,15 +3,17 @@ import { useLocation } from 'react-router-dom';
 
 const PlayerPage = () => {
   const location = useLocation();
-  const urlParams = new URLSearchParams(location.search);
-  const audioUrl = urlParams.get('url');
+  const params = new URLSearchParams(location.search);
+  const audioUrl = params.get('url');
 
   return (
-    <div>
-      <h1>Audio Player</h1>
-      <audio controls src={audioUrl}>
-        Your browser does not support the audio element.
-      </audio>
+    <div className="container">
+      <h2>Audio Player</h2>
+      {audioUrl ? (
+        <audio controls src={audioUrl} aria-label="Audio player for the selected file" />
+      ) : (
+        <p>No audio file selected</p>
+      )}
     </div>
   );
 };
