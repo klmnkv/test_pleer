@@ -31,6 +31,7 @@ const UploadPage = () => {
       setError('Please select a file first');
       return;
     }
+
     const formData = new FormData();
     formData.append('audio', file);
 
