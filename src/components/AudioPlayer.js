@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 
 const AudioPlayer = ({ audioUrl }) => {
   const audioRef = useRef(null);
@@ -7,13 +8,10 @@ const AudioPlayer = ({ audioUrl }) => {
 
   useEffect(() => {
     const audioElement = audioRef.current;
-
     if (!audioElement) {
       console.error('Audio element not found');
       return;
     }
-
-    console.log('Audio URL:', audioUrl);
 
     const handlePlayPause = () => {
       setIsPlaying(!audioElement.paused);
@@ -57,7 +55,7 @@ const AudioPlayer = ({ audioUrl }) => {
     <div>
       <h2>Audio Player</h2>
       <audio ref={audioRef} src={audioUrl} />
-      <div>
+      <div className="controls">
         <button onClick={handlePlayPauseClick} aria-label={isPlaying ? "Pause" : "Play"}>
           {isPlaying ? "Pause" : "Play"}
         </button>
@@ -75,6 +73,10 @@ const AudioPlayer = ({ audioUrl }) => {
       </div>
     </div>
   );
+};
+
+AudioPlayer.propTypes = {
+  audioUrl: PropTypes.string.isRequired,
 };
 
 export default AudioPlayer;
