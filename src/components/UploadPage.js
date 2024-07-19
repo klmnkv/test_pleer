@@ -16,6 +16,7 @@ const UploadPage = () => {
         setFiles(response.data);
       } catch (error) {
         console.error('Error fetching files:', error);
+        setError('Failed to fetch files. Please try again later.');
       }
     };
 
@@ -27,33 +28,38 @@ const UploadPage = () => {
   };
 
   const handleUpload = async () => {
-  if (!file) {
-    setError('Please select a file first');
-    return;
-  }
+    if (!file) {
+      setError('Please select a file first');
+      return;
+    }
 
-  const formData = new FormData();
-  formData.append('audio', file);
+    const formData = new FormData();
+    formData.append('audio', file);
 
-  try {
-    const response = await axios.post('https://server-pleer.onrender.com/upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    setAudioUrl(response.data.audioUrl);
-    setError('');
-    setFiles([...files, response.data.audioUrl]);
-  } catch (error) {
-    console.error('Upload error:', error);
-    setError(`Upload failed: ${error.response?.data?.error || error.message || 'Unknown error'}`);
-  }
-};
+    try {
+      const response = await axios.post('https://server-pleer.onrender.com/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      setAudioUrl(response.data.audioUrl);
+      setError('');
+      setFiles([...files, response.data.audioUrl]);
+    } catch (error) {
+      console.error('Upload error:', error);
+      setError(`Upload failed: ${error.response?.data?.error || error.message || 'Unknown error'}`);
+    }
+  };
 
   return (
     <div className="container">
       <h2>Upload Audio</h2>
-      <input type="file" onChange={handleFileChange} aria-label="Select an audio file to upload" />
+      <input
+        type="file"
+        onChange={handleFileChange}
+        accept="audio/*"
+        aria-label="Select an audio file to upload"
+      />
       <button onClick={handleUpload} aria-label="Upload the selected audio file">Upload</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {audioUrl && (
@@ -66,7 +72,10 @@ const UploadPage = () => {
       <ul>
         {files.map((file, index) => (
           <li key={index}>
-            <Link to={`/play?url=${encodeURIComponent(file)}`} aria-label={`Play the audio file ${file}`}>{file}</Link>
+            <Link to={`/play?url=${encodeURIComponent(file)}`} aria-label={`Play the audio file ${file}`}>
+              {file.split('/').pop()} {/* Display only the filename */}
+            </Link>
+            <audio controls src={file} /> {/* Direct playback option */}
           </li>
         ))}
       </ul>
